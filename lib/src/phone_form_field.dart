@@ -1,5 +1,7 @@
+import 'dart:isolate';
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_country_selector/flutter_country_selector.dart';
@@ -9,6 +11,7 @@ import 'package:phone_form_field/src/validation/allowed_characters.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 part 'phone_controller.dart';
+
 part 'phone_form_field_state.dart';
 
 /// Phone input extending form field.
@@ -92,6 +95,7 @@ class PhoneFormField extends FormField<PhoneNumber> {
   final EdgeInsets scrollPadding;
   final bool enableInteractiveSelection;
   final TextSelectionControls? selectionControls;
+
   bool get selectionEnabled => enableInteractiveSelection;
   final MouseCursor? mouseCursor;
   final ScrollPhysics? scrollPhysics;
@@ -99,6 +103,8 @@ class PhoneFormField extends FormField<PhoneNumber> {
   final Iterable<String>? autofillHints;
   final bool enableIMEPersonalizedLearning;
   final List<TextInputFormatter>? inputFormatters;
+
+  final List<IsoCode>? isoCodes;
 
   PhoneFormField({
     super.key,
@@ -168,6 +174,7 @@ class PhoneFormField extends FormField<PhoneNumber> {
     this.scrollController,
     this.autofillHints,
     this.enableIMEPersonalizedLearning = true,
+    this.isoCodes,
   })  : assert(
           initialValue == null || controller == null,
           'One of initialValue or controller can be specified at a time',
