@@ -77,6 +77,7 @@ class PhoneFieldView extends StatelessWidget {
           builder: (context) {
             final label = PhoneFieldLocalization.of(context).phoneNumber;
             return PhoneFormField(
+              hideCountrySelector: true,
               focusNode: focusNode,
               controller: controller,
               isCountryButtonPersistent: isCountryButtonPersistant,
@@ -85,18 +86,12 @@ class PhoneFieldView extends StatelessWidget {
               countrySelectorNavigator: selectorNavigator,
               decoration: InputDecoration(
                 label: withLabel ? Text(label) : null,
-                border: outlineBorder
-                    ? const OutlineInputBorder()
-                    : const UnderlineInputBorder(),
+                border: outlineBorder ? const OutlineInputBorder() : const UnderlineInputBorder(),
                 hintText: withLabel ? '' : label,
               ),
               enabled: true,
               countryButtonStyle: const CountryButtonStyle(
-                showFlag: true,
-                showIsoCode: false,
-                showDialCode: true,
-                showDropdownIcon: true,
-              ),
+                  showFlag: false, showIsoCode: false, showDialCode: false, showDropdownIcon: false, p),
               validator: _getValidator(context),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               cursorColor: Theme.of(context).colorScheme.primary,
@@ -146,8 +141,7 @@ class PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
   bool mobileOnly = true;
   bool isCountryButtonPersistent = true;
   bool withLabel = true;
-  CountrySelectorNavigator selectorNavigator =
-      const CountrySelectorNavigator.page();
+  CountrySelectorNavigator selectorNavigator = const CountrySelectorNavigator.page();
   Locale locale = const Locale('en');
   final formKey = GlobalKey<FormState>();
 
@@ -191,8 +185,7 @@ class PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
                     ),
                     SwitchListTile(
                       value: isCountryButtonPersistent,
-                      onChanged: (v) =>
-                          setState(() => isCountryButtonPersistent = v),
+                      onChanged: (v) => setState(() => isCountryButtonPersistent = v),
                       title: const Text('Persistent country chip'),
                     ),
                     SwitchListTile(
@@ -214,8 +207,7 @@ class PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
                               }
                             },
                             items: [
-                              for (final locale
-                                  in PhoneFieldView.supportedLocales)
+                              for (final locale in PhoneFieldView.supportedLocales)
                                 DropdownMenuItem(
                                   value: locale,
                                   child: Text(locale.toLanguageTag()),
@@ -240,18 +232,15 @@ class PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
                             },
                             items: const [
                               DropdownMenuItem(
-                                value: CountrySelectorNavigator.bottomSheet(
-                                    favorites: [IsoCode.GU, IsoCode.GY]),
+                                value: CountrySelectorNavigator.bottomSheet(favorites: [IsoCode.GU, IsoCode.GY]),
                                 child: Text('Bottom sheet'),
                               ),
                               DropdownMenuItem(
-                                value: CountrySelectorNavigator
-                                    .draggableBottomSheet(),
+                                value: CountrySelectorNavigator.draggableBottomSheet(),
                                 child: Text('Draggable modal sheet'),
                               ),
                               DropdownMenuItem(
-                                value:
-                                    CountrySelectorNavigator.modalBottomSheet(),
+                                value: CountrySelectorNavigator.modalBottomSheet(),
                                 child: Text('Modal sheet'),
                               ),
                               DropdownMenuItem(
@@ -280,8 +269,7 @@ class PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
                             selectorNavigator: selectorNavigator,
                             withLabel: withLabel,
                             outlineBorder: outlineBorder,
-                            isCountryButtonPersistant:
-                                isCountryButtonPersistent,
+                            isCountryButtonPersistant: isCountryButtonPersistent,
                             mobileOnly: mobileOnly,
                             locale: locale,
                           ),
@@ -292,8 +280,7 @@ class PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
                     Text(controller.value.toString()),
                     Text('is valid mobile number '
                         '${controller.value.isValid(type: PhoneNumberType.mobile)}'),
-                    Text(
-                        'is valid fixed line number ${controller.value.isValid(type: PhoneNumberType.fixedLine)}'),
+                    Text('is valid fixed line number ${controller.value.isValid(type: PhoneNumberType.fixedLine)}'),
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => formKey.currentState?.reset(),
@@ -309,8 +296,7 @@ class PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
-                      onPressed: () => controller.value =
-                          PhoneNumber.parse('+33 699 999 999'),
+                      onPressed: () => controller.value = PhoneNumber.parse('+33 699 999 999'),
                       child: const Text('Set +33 699 999 999'),
                     ),
                   ],

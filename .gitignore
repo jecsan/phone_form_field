@@ -32,3 +32,6 @@ example/build
 **/generated_plugin_registrant.cc
 **/generated_plugin_registrant.h
 **/generated_plugin_registrant.cmake
+
+# FVM Version Cache
+.fvm/

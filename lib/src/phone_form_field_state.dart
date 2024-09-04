@@ -78,8 +78,7 @@ class PhoneFormFieldState extends FormFieldState<PhoneNumber> {
 
   Widget builder() {
     final textAlignment = _computeTextAlign();
-    final countryButtonForEachSlot =
-        _buildCountryButtonForEachSlot(textAlignment);
+    final countryButtonForEachSlot = _buildCountryButtonForEachSlot(textAlignment);
     return PhoneFieldSemantics(
       hasFocus: focusNode.hasFocus,
       enabled: widget.enabled,
@@ -87,18 +86,17 @@ class PhoneFormFieldState extends FormFieldState<PhoneNumber> {
       child: TextField(
         decoration: widget.decoration.copyWith(
           errorText: errorText,
-          prefix: countryButtonForEachSlot[_CountryButtonSlot.prefix],
-          prefixIcon: countryButtonForEachSlot[_CountryButtonSlot.prefixIcon],
-          suffix: countryButtonForEachSlot[_CountryButtonSlot.suffix],
-          suffixIcon: countryButtonForEachSlot[_CountryButtonSlot.suffixIcon],
+          prefixIcon: widget.hideCountrySelector ? null : countryButtonForEachSlot[_CountryButtonSlot.prefixIcon],
+          suffix: widget.hideCountrySelector ? null : countryButtonForEachSlot[_CountryButtonSlot.suffix],
+          suffixIcon: widget.hideCountrySelector ? null : countryButtonForEachSlot[_CountryButtonSlot.suffixIcon],
         ),
         controller: controller._formattedNationalNumberController,
         focusNode: focusNode,
         enabled: widget.enabled,
         inputFormatters: widget.inputFormatters ??
             [
-              FilteringTextInputFormatter.allow(RegExp(
-                  '[${AllowedCharacters.plus}${AllowedCharacters.digits}${AllowedCharacters.punctuation}]')),
+              FilteringTextInputFormatter.allow(
+                  RegExp('[${AllowedCharacters.plus}${AllowedCharacters.digits}${AllowedCharacters.punctuation}]')),
             ],
         onChanged: _onTextfieldChanged,
         textAlign: _computeTextAlign(),
@@ -140,9 +138,7 @@ class PhoneFormFieldState extends FormFieldState<PhoneNumber> {
 
   TextAlign _computeTextAlign() {
     final directionality = Directionality.of(context);
-    return directionality == TextDirection.ltr
-        ? TextAlign.start
-        : TextAlign.end;
+    return directionality == TextDirection.ltr ? TextAlign.start : TextAlign.end;
   }
 
   /// returns where the country button is placed in the input
@@ -175,7 +171,7 @@ class PhoneFormFieldState extends FormFieldState<PhoneNumber> {
             key: const ValueKey('country-code-chip'),
             isoCode: controller.value.isoCode,
             onTap: widget.enabled ? () => _selectCountry(context) : null,
-            padding: _computeCountryButtonPadding(context),
+            padding: EdgeInsets.zero,
             showFlag: widget.countryButtonStyle.showFlag,
             showIsoCode: widget.countryButtonStyle.showIsoCode,
             showDialCode: widget.countryButtonStyle.showDialCode,
@@ -200,28 +196,19 @@ class PhoneFormFieldState extends FormFieldState<PhoneNumber> {
   EdgeInsets _computeCountryButtonPadding(BuildContext context) {
     final userDefinedPadding = widget.countryButtonStyle.padding;
     final isUnderline = widget.decoration.border is UnderlineInputBorder;
-    final hasLabel =
-        widget.decoration.label != null || widget.decoration.labelText != null;
+    final hasLabel = widget.decoration.label != null || widget.decoration.labelText != null;
     final isLtr = Directionality.of(context) == TextDirection.ltr;
 
-    EdgeInsets padding = isLtr
-        ? const EdgeInsets.fromLTRB(12, 16, 4, 16)
-        : const EdgeInsets.fromLTRB(4, 16, 12, 16);
+    EdgeInsets padding = isLtr ? const EdgeInsets.fromLTRB(12, 16, 4, 16) : const EdgeInsets.fromLTRB(4, 16, 12, 16);
     if (userDefinedPadding != null) {
       return userDefinedPadding;
     }
     if (!widget.isCountryButtonPersistent) {
-      padding = isLtr
-          ? const EdgeInsets.only(right: 4, left: 12)
-          : const EdgeInsets.only(left: 4, right: 12);
+      padding = isLtr ? const EdgeInsets.only(right: 4, left: 12) : const EdgeInsets.only(left: 4, right: 12);
     } else if (isUnderline && hasLabel) {
-      padding = isLtr
-          ? const EdgeInsets.fromLTRB(12, 25, 4, 7)
-          : const EdgeInsets.fromLTRB(4, 25, 12, 7);
+      padding = isLtr ? const EdgeInsets.fromLTRB(12, 25, 4, 7) : const EdgeInsets.fromLTRB(4, 25, 12, 7);
     } else if (isUnderline && !hasLabel) {
-      padding = isLtr
-          ? const EdgeInsets.fromLTRB(12, 2, 4, 0)
-          : const EdgeInsets.fromLTRB(4, 2, 12, 0);
+      padding = isLtr ? const EdgeInsets.fromLTRB(12, 2, 4, 0) : const EdgeInsets.fromLTRB(4, 2, 12, 0);
     }
     return padding;
   }

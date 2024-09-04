@@ -99,6 +99,7 @@ class PhoneFormField extends FormField<PhoneNumber> {
   final Iterable<String>? autofillHints;
   final bool enableIMEPersonalizedLearning;
   final List<TextInputFormatter>? inputFormatters;
+  final bool hideCountrySelector;
 
   static preloadFlags() => CountrySelector.preloadFlags();
 
@@ -170,6 +171,7 @@ class PhoneFormField extends FormField<PhoneNumber> {
     this.scrollController,
     this.autofillHints,
     this.enableIMEPersonalizedLearning = true,
+    this.hideCountrySelector = false,
   })  : assert(
           initialValue == null || controller == null,
           'One of initialValue or controller can be specified at a time',
